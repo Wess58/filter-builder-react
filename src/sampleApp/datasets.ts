@@ -15,7 +15,7 @@ export const productSchema: Schema = {
 };
 
 export const operators: OperatorsMap = {
-	string: ["eq", "neq", "contains", "starts_with", "ends_with"],
+	string: ["eq", "neq", "contains", "starts_with", "ends_with", "in"],
 	number: ["eq", "neq", "gt", "lt", "between"],
 	boolean: ["eq", "neq"],
 	date: ["eq", "neq", "before", "after", "between"],
