@@ -45,7 +45,7 @@ describe("FilterBuilder manual Apply", () => {
 
     // ✅ onChange should have been called
     expect(mockChange).toHaveBeenCalled();
-    const lastChange = mockChange.mock.calls.at(-1)[0];
+    const lastChange = mockChange.mock.lastCall?.[0];
     expect(lastChange).toMatchObject({
       and: [{ field: "age", operator: "gt", value: 25 }],
     });
