@@ -29,6 +29,13 @@ npm run dev
 ```
 This launches the example playground with sample schemas.
 
+Link to [Live demo](https://wess58.github.io/filter-builder-react/) with :
+- 1. users schemas
+- 2. products schema
+- 2. one with an initial schema : deserialized JSON to UI tree structure 
+
+
+
 ## Example Usage
 ```ts
 import { FilterBuilder } from "filter-builder";
