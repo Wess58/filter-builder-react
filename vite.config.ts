@@ -16,7 +16,6 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`
     },
     rollupOptions: {
-      // Don't bundle peer dependencies
       external: ["react", "react-dom"],
       output: {
         globals: {

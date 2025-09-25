@@ -1,4 +1,4 @@
-# 🔍 React Filter Builder Library
+# React Filter Builder Library
 
 A reusable, dataset-agnostic **Filter Builder** built with **React + TypeScript**.  
 It allows users to construct arbitrary nested filter conditions (`and`/`or` groups) and serialize them into JSON for server integration.  
@@ -124,33 +124,33 @@ Callback when Apply button is clicked and API call resolves.
 ```
 
 ## Architecture Choices
-##### React + TypeScript
+#### React + TypeScript
 Provides type safety, schema validation and easy extensibility.
 
-##### Schema-driven
+#### Schema-driven
 Fields & operators are provided by config, making the library dataset-agnostic.
 
-##### Recursive Tree Structure
+#### Recursive Tree Structure
 Groups (and/or) can contain conditions or other groups.
 This allows deeply nested logical expressions.
 
-##### Serialization & Deserialization
+#### Serialization & Deserialization
 Filters can be saved as JSON, re-loaded and re-edited in the UI.
 
-##### Validation
+#### Validation
 Inline validation rules enforce correct filter input:
 
 - `between` → requires two values
 - `in` → requires array of values
 - `is null/is not null` → require no value
 
-##### Accessibility
+#### Accessibility
 ARIA roles, labels and focus styles make it usable with screen readers and keyboards.
 
-##### Styling with Tailwind
+#### Styling with Tailwind
 Provides a clean baseline while remaining customizable.
 
-##### Testing
+#### Testing
 Unit tests for utils (serialization, validation, API).
 Integration tests for user flows (add/edit/remove conditions, groups, apply filters).
 

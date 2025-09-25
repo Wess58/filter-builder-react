@@ -8,13 +8,13 @@ export default function SampleApp() {
   const [output, setOutput] = useState<any>(null);
   const getConfig: ApiConfig = {
     mode: "GET",
-    url: "https://example.com/api/users",
+    url: "https://jsonplaceholder.typicode.com/users",
     queryParam: "filters",
   };
 
   const postConfig: ApiConfig = {
     mode: "POST",
-    url: "https://example.com/api/products",
+    url: "https://jsonplaceholder.typicode.com/products",
   };
 
   const initialUserFilter = {
@@ -35,9 +35,9 @@ export default function SampleApp() {
   };
 
   return (
-    <div className="flex flex-wrap w-dvw px-[10vw] py-[5vh]">
-      <div className="w-2/3 pl-5">
-        <h2>Filter Builder Demo</h2>
+    <div className="flex flex-wrap w-vw px-[10vw] py-[5vh]">
+      <div className="w-2/3 pr-5">
+        <h2 className="text-2xl font-bold mb-5">Filter Builder Demo</h2>
 
         <h4>User schema</h4>
         <FilterBuilder
@@ -62,7 +62,7 @@ export default function SampleApp() {
           initialJson={initialUserFilter}
           apiConfig={{
             mode: "POST",
-            url: "https://example.com/api/products",
+            url: "https://jsonplaceholder.typicode.com/products",
           }}
           onChange={(json) => setOutput(json)}
           onApply={(res) =>
@@ -72,7 +72,7 @@ export default function SampleApp() {
       </div>
 
       <div className="w-1/3">
-        <h2>Current Schema Live JSON</h2>
+        <h1 className="text-2xl font-bold mb-[50px]">Current Schema Live JSON</h1>
         <pre className="bg-gray-200 p-5 rounded-xl">
           {JSON.stringify(output, null, 2)}
         </pre>
