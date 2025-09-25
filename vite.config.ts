@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-// import tailwindcss from '@tailwindcss/vite'
 import path from "path";
 
 
@@ -8,24 +7,23 @@ import path from "path";
 export default defineConfig({
   plugins: [
     react(),
-    // tailwindcss(),
   ],
-  // build: {
-  //   lib: {
-  //     entry: path.resolve(__dirname, "src/lib/index.ts"),
-  //     name: "FilterBuilder",
-  //     formats: ["es", "cjs"],
-  //     fileName: (format) => `index.${format}.js`
-  //   },
-  //   rollupOptions: {
-  //     // Don't bundle peer dependencies
-  //     external: ["react", "react-dom"],
-  //     output: {
-  //       globals: {
-  //         react: "React",
-  //         "react-dom": "ReactDOM"
-  //       }
-  //     }
-  //   }
-  // }
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, "src/lib/index.ts"),
+      name: "FilterBuilder",
+      formats: ["es", "cjs"],
+      fileName: (format) => `index.${format}.js`
+    },
+    rollupOptions: {
+      // Don't bundle peer dependencies
+      external: ["react", "react-dom"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM"
+        }
+      }
+    }
+  }
 })
