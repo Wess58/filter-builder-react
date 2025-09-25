@@ -9,7 +9,7 @@ export async function sendFilters(
 
 	if (config.mode === "GET") {
 		const queryString = encodeURIComponent(JSON.stringify(json));
-		const url = `${config.url}?${config.queryParam}=${queryString}`;
+		const url = `${config.url}?${config.queryParam || "filters"}=${queryString}`;
 
 		const res = await fetch(url, { method: "GET" });
 		return res.json();

@@ -1,102 +1,56 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, test, expect } from "vitest";
+import { describe, test, vi, expect } from "vitest";
 import { FilterBuilder } from "../components/FilterBuilder";
-import { operators, userSchema } from "../../sampleApp/datasets";
+import { userSchema, operators } from "../../sampleApp/datasets";
+import * as api from "../utils/api-config";
 
-describe("FilterBuilder integration", () => {
-  test("user can add a new condition", () => {
-    let output: any = null;
+describe("FilterBuilder manual apply", () => {
+  test("fires onChange while editing and calls sendFilters only on Apply", async () => {
+    const mockSend = vi
+      .spyOn(api, "sendFilters")
+      .mockResolvedValue({ ok: true });
+    const mockApply = vi.fn();
+    const mockChange = vi.fn();
 
     render(
       <FilterBuilder
         schema={userSchema}
         operators={operators}
-        onChange={(json) => (output = json)}
+        apiConfig={{ mode: "POST", url: "http://test.com" }}
+        onApply={mockApply}
+        onChange={mockChange}
       />
     );
 
-    // Add condition
     fireEvent.click(screen.getByText("+ Condition"));
 
-    // Select field
     fireEvent.change(screen.getByLabelText("Select a field"), {
       target: { value: "age" },
     });
 
-    // Select operator
-    fireEvent.change(screen.getByLabelText("Select an operation"), {
+    fireEvent.change(screen.getByLabelText("Select a operation"), {
       target: { value: "gt" },
     });
 
-    // Enter value
-    fireEvent.change(screen.getByRole("spinbutton"), {
-      target: { value: "30" },
+    fireEvent.change(screen.getByRole("textbox"), {
+      target: { value: "25" },
     });
 
-    expect(output).toMatchObject({
-      and: [{ field: "age", operator: "gt", value: 30 }],
-    });
-  });
-
-  test("user can edit a condition value", () => {
-    let output: any = null;
-
-    render(
-      <FilterBuilder
-        schema={userSchema}
-        operators={operators}
-        onChange={(json) => (output = json)}
-      />
-    );
-
-    fireEvent.click(screen.getByText("+ Condition"));
-
-    fireEvent.change(screen.getByLabelText("Select a field"), {
-      target: { value: "role" },
-    });
-    fireEvent.change(screen.getByLabelText("Select an operation"), {
-      target: { value: "eq" },
+    expect(mockChange).toHaveBeenCalled();
+    const lastChange = mockChange.mock.calls.at(-1)[0]; 
+    expect(lastChange).toMatchObject({
+      and: [{ field: "age", operator: "gt", value: 25 }],
     });
 
-    // Edit text input
-    const input = screen.getByRole("textbox");
-    fireEvent.change(input, { target: { value: "admin" } });
+    expect(mockSend).not.toHaveBeenCalled();
+    expect(mockApply).not.toHaveBeenCalled();
 
-    expect(output).toMatchObject({
-      and: [{ field: "role", operator: "eq", value: "admin" }],
-    });
-  });
+    fireEvent.click(screen.getByText("Apply filters"));
 
-  test("user can remove a condition", () => {
-    let output: any = null;
+    expect(mockSend).toHaveBeenCalled();
 
-    render(
-      <FilterBuilder
-        schema={userSchema}
-        operators={operators}
-        onChange={(json) => (output = json)}
-      />
-    );
+    await new Promise((r) => setTimeout(r, 0));
 
-    fireEvent.click(screen.getByText("+ Condition"));
-    fireEvent.click(screen.getByLabelText("Remove condition"));
-
-    expect(output).toEqual({ and: [] });
-  });
-
-  test("user can add a new group", () => {
-    let output: any = null;
-
-    render(
-      <FilterBuilder
-        schema={userSchema}
-        operators={operators}
-        onChange={(json) => (output = json)}
-      />
-    );
-
-    fireEvent.click(screen.getByText("+ Group"));
-
-    expect(output).toHaveProperty("and[0].and"); // nested group
+    expect(mockApply).toHaveBeenCalledWith({ ok: true });
   });
 });

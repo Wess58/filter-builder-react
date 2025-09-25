@@ -81,6 +81,7 @@ export function FilterBuilder({
           aria-label="Apply filters"
           className="btn-apply-filter"
           disabled={!validation.valid}
+          role="button"
         >
           Apply filters
         </button>
