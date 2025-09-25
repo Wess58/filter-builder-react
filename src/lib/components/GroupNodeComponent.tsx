@@ -55,11 +55,19 @@ export function Group({ group, schema, operators, onChange, onRemove }: Props) {
   };
 
   return (
-    <div className="border border-gray-300 rounded-xl py-5 px-3 m-2 {!validation.valid && !group.children.length ? 'bg-amber-500 : ''}">
+    <div
+      role="group"
+      className={`border-2  rounded-xl py-5 px-3 m-2 ${
+        !validation.valid && !group.children.length
+          ? "border-red-200"
+          : "border-gray-300"
+      }`}
+    >
       <div className="flex gap-2 items-center mb-5">
-        <div className="w-fit">
+        <div className="min-w-[100px]">
           <select
             value={group.operator}
+            aria-label="Select an operation"
             onChange={(e) =>
               onChange({ ...group, operator: e.target.value as "and" | "or" })
             }
@@ -69,13 +77,18 @@ export function Group({ group, schema, operators, onChange, onRemove }: Props) {
           </select>
         </div>
 
-        <button onClick={addCondition}>+ Condition</button>
+        <button aria-label="Add a new condition" onClick={addCondition}>
+          + Condition
+        </button>
 
-        <button onClick={addGroup}>+ Group</button>
+        <button aria-label="Add a new group" onClick={addGroup}>
+          + Group
+        </button>
 
         {onRemove && (
           <button
             title="Remove group"
+            aria-label="Remove group"
             onClick={onRemove}
             className="btn-delete ml-2"
           >
@@ -83,7 +96,6 @@ export function Group({ group, schema, operators, onChange, onRemove }: Props) {
           </button>
         )}
       </div>
-
       {/* validation error */}
       {!validation.valid && !group.children.length && (
         <p className="text-red-500 text-sm mt-1">{validation.error}</p>

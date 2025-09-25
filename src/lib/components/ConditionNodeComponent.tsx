@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { ConditionNode, Schema, OperatorsMap } from "../constants/types";
 import { validateCondition } from "../utils/validation-condition";
 import DatePicker from "react-datepicker";
@@ -23,8 +24,30 @@ export function Condition({
   const renderValueInput = () => {
     if (!condition.operator) return null;
 
-    // Null-type operators skip value input
     if (["is null", "is not null"].includes(condition.operator)) return null;
+
+    if (condition.operator === "in") {
+      const values = Array.isArray(condition.value) ? condition.value : [];
+      const [inputValue, setInputValue] = useState(values.join(", "));
+
+      return (
+        <input
+          type="text"
+		  role="textbox"
+          placeholder="Enter comma separated values"
+          // value={values.join(", ")}
+          value={inputValue}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+            const arr = e.target.value
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean);
+            onChange({ ...condition, value: arr });
+          }}
+        />
+      );
+    }
 
     switch (fieldType) {
       case "number":
@@ -37,6 +60,8 @@ export function Condition({
             <div className="flex gap-2">
               <input
                 type="number"
+				role="textbox"
+				aria-label="Enter a number"
                 value={values[0]}
                 onChange={(e) => {
                   const newVals = [Number(e.target.value), values[1]];
@@ -45,6 +70,8 @@ export function Condition({
               />
               <input
                 type="number"
+				role="textbox"
+				aria-label="Enter a number"
                 value={values[1]}
                 onChange={(e) => {
                   const newVals = [values[0], Number(e.target.value)];
@@ -57,6 +84,8 @@ export function Condition({
         return (
           <input
             type="number"
+			role="textbox"
+			aria-label="Enter a number"
             value={condition.value ?? ""}
             onChange={(e) =>
               onChange({ ...condition, value: Number(e.target.value) })
@@ -68,6 +97,7 @@ export function Condition({
         return (
           <select
             value={String(condition.value ?? "")}
+            aria-label="Select an option"
             onChange={(e) =>
               onChange({ ...condition, value: e.target.value === "true" })
             }
@@ -89,6 +119,7 @@ export function Condition({
             <div className="flex gap-2">
               <DatePicker
                 selected={values[0] ? new Date(values[0]) : null}
+				aria-label="Select start date"
                 onChange={(date) => {
                   const newVals = [date, values[1]];
                   onChange({ ...condition, value: newVals });
@@ -98,6 +129,7 @@ export function Condition({
               />
               <DatePicker
                 selected={values[1] ? new Date(values[1]) : null}
+				aria-label="Select end date"
                 onChange={(date) => {
                   const newVals = [values[0], date];
                   onChange({ ...condition, value: newVals });
@@ -111,6 +143,7 @@ export function Condition({
         return (
           <DatePicker
             selected={condition.value ? new Date(condition.value) : null}
+			aria-label="Select date"
             onChange={(date) => onChange({ ...condition, value: date })}
             className="border p-1 rounded"
             placeholderText="Select date"
@@ -121,6 +154,7 @@ export function Condition({
         return (
           <input
             type="text"
+            role="textbox"
             value={condition.value ?? ""}
             onChange={(e) => onChange({ ...condition, value: e.target.value })}
           />
@@ -129,11 +163,12 @@ export function Condition({
   };
 
   return (
-    <div className="mb-2 p-2 border-gray-500 rounded-xl">
+    <div role="condition" className="mb-2 p-2 border-gray-500 rounded-xl">
       <div className="flex gap-2 items-center">
         {/* field select */}
         <select
           value={condition.field}
+          aria-label="Select a field"
           onChange={(e) =>
             onChange({
               ...condition,
@@ -157,6 +192,7 @@ export function Condition({
         {condition.field && (
           <select
             value={condition.operator}
+            aria-label="Select a operation"
             onChange={(e) =>
               onChange({ ...condition, operator: e.target.value })
             }
@@ -177,6 +213,7 @@ export function Condition({
           !["is null", "is not null"].includes(condition.operator) && (
             <input
               className="border p-1 rounded flex-1"
+			  role="textbox"
               type={fieldType === "number" ? "number" : "text"}
               value={condition.value ?? ""}
               onChange={(e) => {
@@ -193,6 +230,7 @@ export function Condition({
 
         <button
           title="Remove condition"
+          aria-label="Remove condition"
           onClick={onRemove}
           className="btn-delete ml-2"
         >

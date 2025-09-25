@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import {
-  type ConditionNode,
   type GroupNode,
   type OperatorsMap,
   type Schema,
@@ -14,12 +13,13 @@ import { deserialize, serialize } from "../utils/serialization";
 import { validateGroup } from "../utils/validation-group";
 import { sendFilters } from "../utils/api-config";
 
-
 type Props = {
   schema: Schema;
   operators: OperatorsMap;
   initialJson?: any;
   onChange: (json: any) => void;
+  apiConfig?: ApiConfig;
+  onApply?: (response: any) => void;
 };
 
 export function FilterBuilder({
@@ -27,6 +27,8 @@ export function FilterBuilder({
   operators,
   initialJson,
   onChange,
+  apiConfig,
+  onApply,
 }: Props) {
   const [tree, setTree] = useState<GroupNode>(
     initialJson
@@ -39,17 +41,30 @@ export function FilterBuilder({
         }
   );
 
+  const [validation, setValidation] = useState<{
+    valid: boolean;
+    error?: string;
+  }>({
+    valid: false,
+  });
+
   useEffect(() => {
     if (onChange) {
       const validation = validateGroup(tree);
-      // onChange(serialize(tree));
+      setValidation(validation);
 
       validation.valid
         ? onChange(serialize(tree))
         : onChange({ error: validation.error });
     }
-  
   }, [tree]);
+
+  const handleApply = async () => {
+    if (!apiConfig || !validation.valid) return;
+
+    const response = await sendFilters(tree, apiConfig);
+    onApply?.(response);
+  };
 
   return (
     <div>
@@ -59,6 +74,21 @@ export function FilterBuilder({
         operators={operators}
         onChange={setTree}
       />
+
+      {apiConfig && (
+        <button
+          onClick={handleApply}
+          aria-label="Apply filters"
+          className="btn-apply-filter"
+          disabled={!validation.valid}
+        >
+          Apply filters
+        </button>
+      )}
+
+      {/* {!validation.valid && (
+        <p className="text-red-500 text-sm mt-1">{validation.error}</p>
+      )} */}
     </div>
   );
 }
