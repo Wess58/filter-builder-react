@@ -43,27 +43,22 @@ describe("FilterBuilder manual Apply", () => {
     // Add a valid condition
     addValidCondition();
 
-    // ✅ onChange should have been called
     expect(mockChange).toHaveBeenCalled();
     const lastChange = mockChange.mock.lastCall?.[0];
     expect(lastChange).toMatchObject({
       and: [{ field: "age", operator: "gt", value: 25 }],
     });
 
-    // ✅ Apply should now be enabled
     const applyButton = screen.getByLabelText("Apply filters");
     expect(applyButton).not.toBeDisabled();
 
     // Click Apply
     fireEvent.click(applyButton);
 
-    // ✅ API should be called
     expect(mockSend).toHaveBeenCalled();
 
-    // wait for async
     await new Promise((r) => setTimeout(r, 0));
 
-    // ✅ onApply should receive mocked response
     expect(mockApply).toHaveBeenCalledWith({ ok: true });
   });
 
@@ -90,7 +85,6 @@ describe("FilterBuilder manual Apply", () => {
 
     fireEvent.click(applyButton);
 
-    // ✅ No API call, no onApply
     expect(mockSend).not.toHaveBeenCalled();
     expect(mockApply).not.toHaveBeenCalled();
   });

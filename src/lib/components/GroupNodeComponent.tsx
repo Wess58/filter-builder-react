@@ -57,7 +57,7 @@ export function Group({ group, schema, operators, onChange, onRemove }: Props) {
   return (
     <div
       role="group"
-      className={`border-2  rounded-xl py-5 px-3 m-2 ${
+      className={`rule border-2  rounded-xl py-5 px-3 m-2 ${
         !validation.valid && !group.children.length
           ? "border-red-200"
           : "border-gray-300"

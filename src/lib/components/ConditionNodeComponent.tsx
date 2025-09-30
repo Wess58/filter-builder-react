@@ -33,7 +33,7 @@ export function Condition({
       return (
         <input
           type="text"
-		  role="textbox"
+          role="textbox"
           placeholder="Enter comma separated values"
           // value={values.join(", ")}
           value={inputValue}
@@ -60,8 +60,8 @@ export function Condition({
             <div className="flex gap-2">
               <input
                 type="number"
-				role="textbox"
-				aria-label="Enter a number"
+                role="textbox"
+                aria-label="Enter a number"
                 value={values[0]}
                 onChange={(e) => {
                   const newVals = [Number(e.target.value), values[1]];
@@ -70,8 +70,8 @@ export function Condition({
               />
               <input
                 type="number"
-				role="textbox"
-				aria-label="Enter a number"
+                role="textbox"
+                aria-label="Enter a number"
                 value={values[1]}
                 onChange={(e) => {
                   const newVals = [values[0], Number(e.target.value)];
@@ -84,8 +84,8 @@ export function Condition({
         return (
           <input
             type="number"
-			role="textbox"
-			aria-label="Enter a number"
+            role="textbox"
+            aria-label="Enter a number"
             value={condition.value ?? ""}
             onChange={(e) =>
               onChange({ ...condition, value: Number(e.target.value) })
@@ -119,7 +119,7 @@ export function Condition({
             <div className="flex gap-2">
               <DatePicker
                 selected={values[0] ? new Date(values[0]) : null}
-				aria-label="Select start date"
+                aria-label="Select start date"
                 onChange={(date) => {
                   const newVals = [date, values[1]];
                   onChange({ ...condition, value: newVals });
@@ -129,7 +129,7 @@ export function Condition({
               />
               <DatePicker
                 selected={values[1] ? new Date(values[1]) : null}
-				aria-label="Select end date"
+                aria-label="Select end date"
                 onChange={(date) => {
                   const newVals = [values[0], date];
                   onChange({ ...condition, value: newVals });
@@ -143,7 +143,7 @@ export function Condition({
         return (
           <DatePicker
             selected={condition.value ? new Date(condition.value) : null}
-			aria-label="Select date"
+            aria-label="Select date"
             onChange={(date) => onChange({ ...condition, value: date })}
             className="border p-1 rounded"
             placeholderText="Select date"
@@ -163,7 +163,7 @@ export function Condition({
   };
 
   return (
-    <div role="condition" className="mb-2 p-2 border-gray-500 rounded-xl">
+    <div role="condition" className="rule mb-2 p-2 border-gray-500 rounded-xl">
       <div className="flex gap-2 items-center">
         {/* field select */}
         <select

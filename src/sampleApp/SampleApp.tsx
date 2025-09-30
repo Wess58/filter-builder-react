@@ -6,6 +6,8 @@ import type { ApiConfig } from "../lib/constants/types";
 
 export default function SampleApp() {
   const [output, setOutput] = useState<any>(null);
+  // const [currentTab, setCurrentTab] = useState<string>("users");
+
   const getConfig: ApiConfig = {
     mode: "GET",
     url: "https://jsonplaceholder.typicode.com/users",
@@ -33,6 +35,8 @@ export default function SampleApp() {
       },
     ],
   };
+
+  // const buttons: string[] = ["users", "products", "other"];
 
   return (
     <div className="flex flex-wrap w-vw px-[10vw] py-[5vh]">
@@ -72,7 +76,9 @@ export default function SampleApp() {
       </div>
 
       <div className="w-1/3">
-        <h1 className="text-2xl font-bold mb-[50px]">Current Schema Live JSON</h1>
+        <h1 className="text-2xl font-bold mb-[50px]">
+          Current Schema Live JSON
+        </h1>
         <pre className="bg-gray-200 p-5 rounded-xl">
           {JSON.stringify(output, null, 2)}
         </pre>
